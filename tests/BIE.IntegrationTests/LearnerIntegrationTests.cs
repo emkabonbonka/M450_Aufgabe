@@ -26,6 +26,6 @@ public class LearnerIntegrationTests
 
         Assert.AreEqual(entry, record.applicant);
         Assert.IsTrue(record.id > 0);
-        Assert.AreEqual("approved", record.decision.status);
+        Assert.AreEqual("approved", record.Decision.status);
     }
 }

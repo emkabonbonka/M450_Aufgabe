@@ -9,32 +9,28 @@ public class LearnerE2ETests : BrowserTestBase
     [TestMethod]
     public void TouristAt30DaysRemainsApprovedAfterReload()
     {
-        // Arrange
+        // Arrange – Formular ausfüllen
         Fill("Sam Browser", "Tourismus", "30");
 
-        // Act
+        // Act – Formular absenden
         Driver.FindElement(By.Id("submit")).Click();
 
-        // Warten
+        // Assert – Auf Genehmigung warten und Ergebnis prüfen
         var result = Decision("approved");
         StringAssert.Contains(result.Text, "GENEHMIGT");
 
-        // Assert
-        StringAssert.Contains(result.Text, "GENEHMIGT");
-
-        // Act
+        // Act – Seite neu laden
         var caseId = result.GetDomAttribute("data-application-id");
         Driver.Navigate().Refresh();
 
-        // Warten
-        var row = Wait.Until(d =>
+        // Warten, bis der gespeicherte Eintrag geladen ist
         var row = Wait.Until(d =>
             d.FindElements(By.CssSelector("#application-list tr"))
              .FirstOrDefault(r => r.GetDomAttribute("data-id") == caseId));
 
         var cells = row.FindElements(By.TagName("td"));
 
-        // Assert
+        // Assert – Gespeicherte Werte überprüfen
         Assert.AreEqual("Sam Browser", cells[1].Text);
         Assert.AreEqual("Orion", cells[2].Text);
         Assert.AreEqual("30 Tage", cells[3].Text);
